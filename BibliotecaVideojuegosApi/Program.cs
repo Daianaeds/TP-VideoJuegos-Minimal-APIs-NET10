@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<VideoJuegoService>();
+builder.Services.AddScoped<PrestamoVideoJuegoService>();
+builder.Services.AddScoped<CopiaVideoJuegoService>();
 
 // Configure EF Core with SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
