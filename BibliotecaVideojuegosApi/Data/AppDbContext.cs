@@ -6,8 +6,8 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<VideoJuego> VideoJuegos => Set<VideoJuego>();
-    public DbSet<CopiaVideoJuego> CopiasVideoJuegos => Set<CopiaVideoJuego>();
-    public DbSet<PrestamoJuego> HistorialesPrestamos => Set<PrestamoJuego>();
+    public DbSet<VideoJuego> VideoJuego => Set<VideoJuego>();
+    public DbSet<CopiaVideoJuego> CopiaVideoJuego => Set<CopiaVideoJuego>();
+    public DbSet<PrestamoJuego> PrestamoVideoJuego => Set<PrestamoJuego>();
 }
 
