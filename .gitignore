@@ -1,0 +1,30 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio workspace/cache
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+VSWorkspaceState.json
+
+# Rider / VS Code (optional)
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Logs
+*.log
+
+# Local databases / cache
+*.sqlite
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
