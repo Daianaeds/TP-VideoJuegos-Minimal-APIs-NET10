@@ -11,26 +11,25 @@ public class CopiaVideoJuegoService(AppDbContext db)
     {
         var nuevoVideoJuego = new CopiaVideoJuego 
         {
-            VideoJuegoId = copiaVideoJuegoRequestDto.VideoJuegoId,
-            EstadoPrestado = copiaVideoJuegoRequestDto.EstadoPrestado
+            VideoJuegoId = copiaVideoJuegoRequestDto.VideoJuegoId
         };
 
-        db.CopiasVideoJuegos.Add(nuevoVideoJuego);
+        db.CopiaVideoJuego.Add(nuevoVideoJuego);
         await db.SaveChangesAsync();
 
         return true;
     }
 
-    public async Task<CopiasVideosJuegosResponseDto?> GetCopiaVideoJuego(int id)
+    public async Task<CopiasVideosJuegosResponseDto?> GetCopiaVideoJuegoById(int id)
     {
-        return await db.CopiasVideoJuegos
+        return await db.CopiaVideoJuego
             .AsNoTracking()
             .Where(cvj => cvj.Id == id)
             .Select(cvj => new CopiasVideosJuegosResponseDto
             {
                 VideoJuegoId = cvj.VideoJuegoId,
                 EstadoPrestado = cvj.EstadoPrestado,
-                VideoJuego = db.VideoJuegos
+                VideoJuego = db.VideoJuego
                     .Where(vj => vj.Id == cvj.VideoJuegoId)
                     .Select(vj => new VideoJuegoResponseDto
                     {
@@ -46,13 +45,13 @@ public class CopiaVideoJuegoService(AppDbContext db)
 
     public async Task<List<CopiasVideosJuegosResponseDto>> GetAllCopiaVideoJuego()
     {
-        return await db.CopiasVideoJuegos
+        return await db.CopiaVideoJuego
             .AsNoTracking()
             .Select(cvj => new CopiasVideosJuegosResponseDto
             {
                 VideoJuegoId = cvj.VideoJuegoId,
                 EstadoPrestado = cvj.EstadoPrestado,
-                VideoJuego = db.VideoJuegos
+                VideoJuego = db.VideoJuego
                     .Where(vj => vj.Id == cvj.VideoJuegoId)
                     .Select(vj => new VideoJuegoResponseDto
                     {
@@ -68,7 +67,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
     
     public async Task<bool> ActualizarCopiaVideoJuego(int id, CopiaVideoJuegoRequestDto copiaVideoJuegoRequest)
     {
-        var copiaVideoJuego = await db.CopiasVideoJuegos
+        var copiaVideoJuego = await db.CopiaVideoJuego
             .AsTracking()
             .FirstOrDefaultAsync(cvj => cvj.Id == id);
 
@@ -85,7 +84,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
 
     public async Task<bool> ActualizarEstadoPrestamoCopiaVideoJuego(int id, bool estadoPrestado)
     {
-        var copiaVideoJuego = await db.CopiasVideoJuegos
+        var copiaVideoJuego = await db.CopiaVideoJuego
             .AsTracking()
             .FirstOrDefaultAsync(cvj => cvj.Id == id);
         if (copiaVideoJuego is not null)
@@ -99,12 +98,12 @@ public class CopiaVideoJuegoService(AppDbContext db)
 
     public async Task<bool> EliminarCopiaVideoJuego(int id)
     {
-        var copiaVideoJuego = await db.CopiasVideoJuegos
+        var copiaVideoJuego = await db.CopiaVideoJuego
             .AsTracking()
             .FirstOrDefaultAsync(cvj => cvj.Id == id);
         if (copiaVideoJuego is not null)
         { 
-            db.CopiasVideoJuegos.Remove(copiaVideoJuego);
+            db.CopiaVideoJuego.Remove(copiaVideoJuego);
             await db.SaveChangesAsync();
             return true;
         }

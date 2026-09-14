@@ -16,7 +16,7 @@ public class VideoJuegoService(AppDbContext db)
             Plataforma = videoJuegoRequest.Plataforma 
         };
 
-        db.VideoJuegos.Add(nuevoVideoJuego);
+        db.VideoJuego.Add(nuevoVideoJuego);
         await db.SaveChangesAsync();
 
         return new VideoJuegoResponseDto
@@ -30,7 +30,7 @@ public class VideoJuegoService(AppDbContext db)
 
     public async Task<VideoJuegoResponseDto?> GetVideoJuego(int id)
     {
-        return await db.VideoJuegos
+        return await db.VideoJuego
             .AsNoTracking()
             .Where(vj => vj.Id == id)
             .Select(vj => new VideoJuegoResponseDto
@@ -44,7 +44,7 @@ public class VideoJuegoService(AppDbContext db)
     }
     public async Task<List<VideoJuegoResponseDto>> GetVideosJuegos()
     {
-        return await db.VideoJuegos
+        return await db.VideoJuego
             .AsNoTracking()
             .Select(vj => new VideoJuegoResponseDto
             {
@@ -57,7 +57,7 @@ public class VideoJuegoService(AppDbContext db)
     }
     public async Task<bool> ActualizarVideoJuego(int id, VideoJuegoRequestDto videoJuegoRequest)
     {
-        var videoJuego = await db.VideoJuegos
+        var videoJuego = await db.VideoJuego
             .AsTracking()
             .FirstOrDefaultAsync(vj => vj.Id == id);
 
@@ -75,12 +75,12 @@ public class VideoJuegoService(AppDbContext db)
 
     public async Task<bool> EliminarVideoJuego(int id)
     {
-        var videoJuego = await db.VideoJuegos
+        var videoJuego = await db.VideoJuego
             .AsTracking()
             .FirstOrDefaultAsync(vj => vj.Id == id);
         if (videoJuego is not null)
         { 
-            db.VideoJuegos.Remove(videoJuego);
+            db.VideoJuego.Remove(videoJuego);
             await db.SaveChangesAsync();
             return true;
         }
