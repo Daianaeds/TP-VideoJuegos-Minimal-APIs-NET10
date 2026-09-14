@@ -28,7 +28,7 @@ public class VideoJuegoService(AppDbContext db)
         };
     }
 
-    public async Task<VideoJuegoResponseDto?> GetVideoJuego(int id)
+    public async Task<VideoJuegoResponseDto?> GetVideoJuegoById(int id)
     {
         return await db.VideoJuego
             .AsNoTracking()
