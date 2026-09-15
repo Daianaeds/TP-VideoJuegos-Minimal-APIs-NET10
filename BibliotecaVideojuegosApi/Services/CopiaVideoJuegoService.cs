@@ -7,17 +7,36 @@ namespace BibliotecaVideojuegosApi.Services;
 
 public class CopiaVideoJuegoService(AppDbContext db)
 {
-    public async Task<bool> AgregarCopiasVideoJuego(CopiaVideoJuegoRequestDto copiaVideoJuegoRequestDto)
+    public async Task<CopiasVideosJuegosResponseDto> AgregarCopiasVideoJuego(CopiaVideoJuegoRequestDto copiaVideoJuegoRequestDto)
     {
         var nuevoVideoJuego = new CopiaVideoJuego 
         {
-            VideoJuegoId = copiaVideoJuegoRequestDto.VideoJuegoId
+            VideoJuegoId = copiaVideoJuegoRequestDto.VideoJuegoId,
+            EstadoPrestado = copiaVideoJuegoRequestDto.EstadoPrestado
         };
 
         db.CopiaVideoJuego.Add(nuevoVideoJuego);
         await db.SaveChangesAsync();
 
-        return true;
+        var videoJuego = await db.VideoJuego
+            .AsNoTracking()
+            .Where(vj => vj.Id == nuevoVideoJuego.VideoJuegoId)
+            .Select(vj => new VideoJuegoResponseDto
+            {
+                Id = vj.Id,
+                Nombre = vj.Titulo,
+                Genero = vj.Genero,
+                Plataforma = vj.Plataforma
+            })
+            .FirstOrDefaultAsync();
+
+        return new CopiasVideosJuegosResponseDto
+        {
+            Id = nuevoVideoJuego.Id,
+            VideoJuegoId = nuevoVideoJuego.VideoJuegoId,
+            EstadoPrestado = nuevoVideoJuego.EstadoPrestado,
+            VideoJuego = videoJuego
+        };
     }
 
     public async Task<CopiasVideosJuegosResponseDto?> GetCopiaVideoJuegoById(int id)
@@ -27,6 +46,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
             .Where(cvj => cvj.Id == id)
             .Select(cvj => new CopiasVideosJuegosResponseDto
             {
+                Id = cvj.Id,
                 VideoJuegoId = cvj.VideoJuegoId,
                 EstadoPrestado = cvj.EstadoPrestado,
                 VideoJuego = db.VideoJuego
@@ -49,6 +69,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
             .AsNoTracking()
             .Select(cvj => new CopiasVideosJuegosResponseDto
             {
+                Id = cvj.Id,
                 VideoJuegoId = cvj.VideoJuegoId,
                 EstadoPrestado = cvj.EstadoPrestado,
                 VideoJuego = db.VideoJuego
