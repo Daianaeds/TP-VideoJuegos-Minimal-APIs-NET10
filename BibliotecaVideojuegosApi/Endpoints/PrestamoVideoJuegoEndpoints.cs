@@ -11,7 +11,7 @@ public static class PrestamoVideoJuegoEndpoints
 
         groupPrestamos.MapGet("/", ObtenerPrestamos);
         groupPrestamos.MapGet("/{id:int}", ObtenerPrestamoPorId);
-        groupPrestamos.MapPost("/", CrearPrestamo);
+        groupPrestamos.MapPost("/", CrearPrestamo).RequireAuthorization();
         groupPrestamos.MapPut("/{id:int}/devolver", DevolverPrestamo);
         groupPrestamos.MapDelete("/{id:int}", EliminarPrestamo);
 

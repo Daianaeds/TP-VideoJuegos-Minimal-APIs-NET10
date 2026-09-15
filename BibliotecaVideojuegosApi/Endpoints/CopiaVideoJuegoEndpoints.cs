@@ -11,7 +11,7 @@ public static class CopiaVideoJuegoEndpoints
 
         groupCopias.MapGet("/", ObtenerCopiasVideoJuego);
         groupCopias.MapGet("/{id:int}", ObtenerCopiaVideoJuegoPorId);
-        groupCopias.MapPost("/", CrearCopiaVideoJuego);
+        groupCopias.MapPost("/", CrearCopiaVideoJuego).RequireAuthorization();
         groupCopias.MapPut("/{id:int}", ActualizarCopiaVideoJuego);
         groupCopias.MapDelete("/{id:int}", EliminarCopiaVideoJuego);
 

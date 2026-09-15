@@ -11,7 +11,7 @@ public static class VideoJuegosEndpoints
 
         groupJuegos.MapGet("/", ObtenerVideosJuegos);
         groupJuegos.MapGet("/{id:int}", ObtenerVideoJuegoPorId);
-        groupJuegos.MapPost("/", CrearVideoJuego);
+        groupJuegos.MapPost("/", CrearVideoJuego).RequireAuthorization();
         groupJuegos.MapPut("/{id:int}", ActualizarVideoJuego);
         groupJuegos.MapDelete("/{id:int}", EliminarVideoJuego);
 
