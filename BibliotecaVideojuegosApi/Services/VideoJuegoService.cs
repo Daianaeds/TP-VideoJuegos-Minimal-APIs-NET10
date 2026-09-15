@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaVideojuegosApi.Services;
 
-public class VideoJuegoService(AppDbContext db)
+public class VideoJuegoService(AppDbContext db, ILogger<VideoJuegoService> logger)
 {
     public async Task<VideoJuegoResponseDto?> CreateVideoJuego(VideoJuegoRequestDto videoJuegoRequest)
     {
@@ -14,6 +14,9 @@ public class VideoJuegoService(AppDbContext db)
 
         if (existeDuplicado)
         {
+            logger.LogWarning(
+                "Intento de crear videojuego duplicado: {Titulo} en {Plataforma}",
+                videoJuegoRequest.Titulo, videoJuegoRequest.Plataforma);
             return null;
         }
 
@@ -35,6 +38,10 @@ public class VideoJuegoService(AppDbContext db)
 
         db.CopiaVideoJuego.Add(nuevaCopia);
         await db.SaveChangesAsync();
+
+        logger.LogInformation(
+            "Videojuego creado: {Id} - {Titulo} ({Plataforma})",
+            nuevoVideoJuego.Id, nuevoVideoJuego.Titulo, nuevoVideoJuego.Plataforma);
 
         return new VideoJuegoResponseDto
         {
@@ -153,6 +160,7 @@ public class VideoJuegoService(AppDbContext db)
             videoJuego.Genero = videoJuegoRequest.Genero;
             videoJuego.Plataforma = videoJuegoRequest.Plataforma;
             await db.SaveChangesAsync();
+            logger.LogInformation("Videojuego actualizado: {Id}", id);
             return true;
         }
 
@@ -168,6 +176,7 @@ public class VideoJuegoService(AppDbContext db)
         { 
             db.VideoJuego.Remove(videoJuego);
             await db.SaveChangesAsync();
+            logger.LogInformation("Videojuego eliminado: {Id}", id);
             return true;
         }
 

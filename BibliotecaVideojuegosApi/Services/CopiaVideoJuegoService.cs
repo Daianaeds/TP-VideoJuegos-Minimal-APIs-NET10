@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaVideojuegosApi.Services;
 
-public class CopiaVideoJuegoService(AppDbContext db)
+public class CopiaVideoJuegoService(AppDbContext db, ILogger<CopiaVideoJuegoService> logger)
 {
     public async Task<CopiasVideosJuegosResponseDto> AgregarCopiasVideoJuego(CopiaVideoJuegoRequestDto copiaVideoJuegoRequestDto)
     {
@@ -17,6 +17,9 @@ public class CopiaVideoJuegoService(AppDbContext db)
 
         db.CopiaVideoJuego.Add(nuevoVideoJuego);
         await db.SaveChangesAsync();
+
+        logger.LogInformation(
+            $"Copia de videojuego creada: {nuevoVideoJuego.Id} para VideoJuegoId {nuevoVideoJuego.VideoJuegoId}");
 
         var videoJuego = await db.VideoJuego
             .AsNoTracking()
@@ -97,6 +100,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
             copiaVideoJuego.VideoJuegoId = copiaVideoJuegoRequest.VideoJuegoId;
             copiaVideoJuego.EstadoPrestado = copiaVideoJuegoRequest.EstadoPrestado;
             await db.SaveChangesAsync();
+            logger.LogInformation($"Copia de videojuego actualizada: {id}");
             return true;
         }
 
@@ -112,6 +116,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
         {
             copiaVideoJuego.EstadoPrestado = estadoPrestado;
             await db.SaveChangesAsync();
+            logger.LogInformation($"Estado de préstamo actualizado para copia {id}: {estadoPrestado}");
             return true;
         }
         return false;
@@ -126,6 +131,7 @@ public class CopiaVideoJuegoService(AppDbContext db)
         { 
             db.CopiaVideoJuego.Remove(copiaVideoJuego);
             await db.SaveChangesAsync();
+            logger.LogInformation($"Copia de videojuego eliminada: {id}");
             return true;
         }
 

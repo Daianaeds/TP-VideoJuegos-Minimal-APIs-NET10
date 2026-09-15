@@ -4,7 +4,7 @@ using BibliotecaVideojuegosApi.Models;
 using Microsoft.EntityFrameworkCore;
 namespace BibliotecaVideojuegosApi.Services;
 
-public class PrestamoVideoJuegoService(AppDbContext db)
+public class PrestamoVideoJuegoService(AppDbContext db, ILogger<PrestamoVideoJuegoService> logger)
 {
     public async Task<PrestamoJuego?> CrearPrestamo(PrestamoVideoJuegoRequestDto request)
     {
@@ -19,6 +19,8 @@ public class PrestamoVideoJuegoService(AppDbContext db)
 
         if (copiaVideoJuego is null || copiaVideoJuego.EstadoPrestado)
         {
+            logger.LogWarning(
+                $"No se pudo crear el préstamo: copia {request.CopiaVideoJuegoId} no existe o ya está prestada");
             return null;
         }
 
@@ -32,6 +34,9 @@ public class PrestamoVideoJuegoService(AppDbContext db)
         db.PrestamoVideoJuego.Add(prestamo);
         copiaVideoJuego.EstadoPrestado = true;
         await db.SaveChangesAsync();
+
+        logger.LogInformation(
+            $"Préstamo creado: {prestamo.Id} para copia {prestamo.CopiaVideoJuegoId} por {prestamo.NombreUsuario}");
 
         return prestamo;
     }
@@ -71,6 +76,7 @@ public class PrestamoVideoJuegoService(AppDbContext db)
         prestamo.FechaDevolucion = DateTime.UtcNow;
         copiaVideoJuego.EstadoPrestado = false;
         await db.SaveChangesAsync();
+        logger.LogInformation($"Préstamo devuelto: {prestamoId}");
         return true;
     }
 
@@ -102,6 +108,7 @@ public class PrestamoVideoJuegoService(AppDbContext db)
 
         db.PrestamoVideoJuego.Remove(prestamo);
         await db.SaveChangesAsync();
+        logger.LogInformation($"Préstamo eliminado: {prestamoId}");
         return true;
     }
 }

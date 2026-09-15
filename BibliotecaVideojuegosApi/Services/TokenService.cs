@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BibliotecaVideojuegosApi.Services;
 
-public class TokenService(IConfiguration configuration)
+public class TokenService(IConfiguration configuration, ILogger<TokenService> logger)
 {
     public TokenRespuestaDto GenerarToken(IdentityUser usuario)
     {
@@ -33,6 +33,8 @@ public class TokenService(IConfiguration configuration)
             claims: claims,
             expires: expiracion,
             signingCredentials: credenciales);
+
+        logger.LogInformation("Token JWT generado para el usuario {UsuarioId}", usuario.Id);
 
         return new TokenRespuestaDto
         {
