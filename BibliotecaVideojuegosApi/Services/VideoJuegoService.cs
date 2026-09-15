@@ -7,8 +7,16 @@ namespace BibliotecaVideojuegosApi.Services;
 
 public class VideoJuegoService(AppDbContext db)
 {
-    public async Task<VideoJuegoResponseDto> CreateVideoJuego(VideoJuegoRequestDto videoJuegoRequest)
+    public async Task<VideoJuegoResponseDto?> CreateVideoJuego(VideoJuegoRequestDto videoJuegoRequest)
     {
+        var existeDuplicado = await db.VideoJuego.AnyAsync(v =>
+            v.Titulo == videoJuegoRequest.Titulo && v.Plataforma == videoJuegoRequest.Plataforma);
+
+        if (existeDuplicado)
+        {
+            return null;
+        }
+
         var nuevoVideoJuego = new VideoJuego 
         { 
             Titulo = videoJuegoRequest.Titulo, 

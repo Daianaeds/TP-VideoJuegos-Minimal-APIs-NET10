@@ -35,6 +35,15 @@ public static class VideoJuegosEndpoints
             }
 
             var videojuegoCreado = await videoJuegosService.CreateVideoJuego(request);
+
+            if (videojuegoCreado is null)
+            {
+                return TypedResults.Problem(
+                    title: "Videojuego duplicado",
+                    detail: "Ya existe un videojuego con ese título en esa plataforma.",
+                    statusCode: StatusCodes.Status409Conflict);
+            }
+
             return TypedResults.Created($"/videojuegos/{videojuegoCreado.Id}", videojuegoCreado);
         }
 

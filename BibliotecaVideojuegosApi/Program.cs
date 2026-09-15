@@ -1,5 +1,6 @@
 using BibliotecaVideojuegosApi.Data;
 using BibliotecaVideojuegosApi.Endpoints;
+using BibliotecaVideojuegosApi.Errores;
 using BibliotecaVideojuegosApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -41,7 +42,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Clave"]!))
         };
     });
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+    };
+});
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 
@@ -53,9 +62,10 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapAuthEndpoints();
 app.MapVideoJuegosEndpoints();
 app.MapBusquedaEndpoints();
