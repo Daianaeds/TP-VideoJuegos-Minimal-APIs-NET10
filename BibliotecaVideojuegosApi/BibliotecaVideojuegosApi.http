@@ -131,11 +131,8 @@ PUT {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego/1/devolver
 DELETE {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego/1
 
 ### ============================================================
-### VARIOS
+### OTROS
 ### ============================================================
-
-### Mensaje de bienvenida
-GET {{BibliotecaVideojuegosApi_HostAddress}}/
 
 ### Health check
 GET {{BibliotecaVideojuegosApi_HostAddress}}/health
