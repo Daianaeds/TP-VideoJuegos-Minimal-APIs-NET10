@@ -1,0 +1,144 @@
+@BibliotecaVideojuegosApi_HostAddress = https://localhost:7167
+
+### ============================================================
+### AUTH
+### ============================================================
+
+### Registrar un nuevo usuario
+POST {{BibliotecaVideojuegosApi_HostAddress}}/auth/registro
+Content-Type: application/json
+
+{
+  "email": "daiana123@gmail.com",
+  "password": "Password123!"
+}
+
+### Login (devuelve el token JWT a usar en @token)
+# @name login
+POST {{BibliotecaVideojuegosApi_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "daiana123@gmail.com",
+  "password": "Password123!"
+}
+
+### ============================================================
+### VIDEOJUEGOS
+### ============================================================
+
+### Obtener todos los videojuegos
+GET {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos
+
+### Obtener un videojuego por Id
+GET {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos/1
+
+### Crear un videojuego (requiere autenticación)
+POST {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "titulo": "Celeste",
+  "genero": "Plataformas",
+  "plataforma": "PC"
+}
+
+### Actualizar un videojuego
+PUT {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos/1
+Content-Type: application/json
+
+{
+  "titulo": "The Legend of Zelda: Breath of the Wild",
+  "genero": "Aventura",
+  "plataforma": "Switch"
+}
+
+### Eliminar un videojuego
+DELETE {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos/1
+
+### ============================================================
+### BUSQUEDA (paginada) - usa el verbo custom QUERY
+### ============================================================
+
+### Buscar videojuegos con filtros y paginación
+QUERY {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos/buscar
+Content-Type: application/json
+
+{
+  "titulo": "Elden Ring",
+  "page": 1,
+  "pageSize": 10
+}
+
+### ============================================================
+### COPIAS DE VIDEOJUEGO
+### ============================================================
+
+### Obtener todas las copias
+GET {{BibliotecaVideojuegosApi_HostAddress}}/copiasvideojuego
+
+### Obtener una copia por Id
+GET {{BibliotecaVideojuegosApi_HostAddress}}/copiasvideojuego/1
+
+### Crear una copia (requiere autenticación)
+POST {{BibliotecaVideojuegosApi_HostAddress}}/copiasvideojuego
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "videoJuegoId": 1,
+  "estadoPrestado": false
+}
+
+### Actualizar una copia
+PUT {{BibliotecaVideojuegosApi_HostAddress}}/copiasvideojuego/1
+Content-Type: application/json
+
+{
+  "videoJuegoId": 1,
+  "estadoPrestado": false
+}
+
+### Eliminar una copia
+DELETE {{BibliotecaVideojuegosApi_HostAddress}}/copiasvideojuego/1
+
+### ============================================================
+### PRESTAMOS DE VIDEOJUEGO
+### ============================================================
+
+### Obtener todos los préstamos
+GET {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego
+
+### Obtener un préstamo por Id
+GET {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego/1
+
+### Crear un préstamo (requiere autenticación)
+POST {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "copiaVideoJuegoId": 1,
+  "fechaPrestamo": "2026-01-01T00:00:00Z",
+  "nombreUsuario": "Daiana"
+}
+
+### Devolver un préstamo
+PUT {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego/1/devolver
+
+### Eliminar un préstamo
+DELETE {{BibliotecaVideojuegosApi_HostAddress}}/prestamovideojuego/1
+
+### ============================================================
+### VARIOS
+### ============================================================
+
+### Mensaje de bienvenida
+GET {{BibliotecaVideojuegosApi_HostAddress}}/
+
+### Health check
+GET {{BibliotecaVideojuegosApi_HostAddress}}/health
+
+### Documento OpenAPI
+GET {{BibliotecaVideojuegosApi_HostAddress}}/openapi/v1.json
