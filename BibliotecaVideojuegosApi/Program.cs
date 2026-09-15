@@ -27,7 +27,7 @@ app.MapVideoJuegosEndpoints();
 app.MapBusquedaEndpoints();
 app.MapCopiaVideoJuegoEndpoints();
 app.MapPrestamoVideoJuegoEndpoints();
-app.MapGet("/", (VideoJuegoService videoJuegosService) => videoJuegosService.GetVideosJuegos());
+app.MapGet("/", () => builder.Configuration["SaludoBienvenida"] ?? "Hola CodigoFacilito!!");
 
 if (app.Environment.IsDevelopment())
 {
