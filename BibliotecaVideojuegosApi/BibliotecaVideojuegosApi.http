@@ -36,7 +36,7 @@ GET {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos/1
 ### Crear un videojuego (requiere autenticación)
 POST {{BibliotecaVideojuegosApi_HostAddress}}/videojuegos
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMTdiYzBlMy1lZjUxLTRkNTYtODVkYy1lMGM4OGM3N2QxZTgiLCJlbWFpbCI6ImRhaWFuYWVsaUBnbWFpbC5jb20iLCJqdGkiOiJkYmJjMDZjMi03MmI5LTQ4YmYtYWMzMS0zMTA3ZDBjOGY1YTQiLCJleHAiOjE3ODk0NTYwMzEsImlzcyI6IkJpYmxpb3RlY2FWaWRlb2p1ZWdvc0FwaSIsImF1ZCI6IkJpYmxpb3RlY2FWaWRlb2p1ZWdvc0FwaSJ9.1W0EpSbjgTYyEERbsLf8aIVrw0yY8lTh3OYl5QP0tGE
+Authorization: Bearer PEGAR_TOKEN
 
 {
   "titulo": "Celeste",
