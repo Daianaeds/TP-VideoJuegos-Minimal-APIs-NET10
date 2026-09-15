@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Scalar.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +52,7 @@ builder.Services.AddProblemDetails(options =>
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -72,11 +72,15 @@ app.MapBusquedaEndpoints();
 app.MapCopiaVideoJuegoEndpoints();
 app.MapPrestamoVideoJuegoEndpoints();
 app.MapGet("/", () => builder.Configuration["SaludoBienvenida"] ?? "Hola CodigoFacilito!!");
+app.MapHealthChecks("/health");
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();   
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "BibliotecaVideojuegosApi v1");
+    });
 }
 
 app.Run();
