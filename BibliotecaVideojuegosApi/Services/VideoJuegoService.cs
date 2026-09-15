@@ -19,6 +19,15 @@ public class VideoJuegoService(AppDbContext db)
         db.VideoJuego.Add(nuevoVideoJuego);
         await db.SaveChangesAsync();
 
+        var nuevaCopia = new CopiaVideoJuego
+        {
+            VideoJuegoId = nuevoVideoJuego.Id,
+            EstadoPrestado = false
+        };
+
+        db.CopiaVideoJuego.Add(nuevaCopia);
+        await db.SaveChangesAsync();
+
         return new VideoJuegoResponseDto
         {
             Id = nuevoVideoJuego.Id,
