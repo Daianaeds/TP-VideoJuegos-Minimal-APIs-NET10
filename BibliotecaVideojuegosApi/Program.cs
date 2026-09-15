@@ -1,26 +1,38 @@
 using BibliotecaVideojuegosApi.Data;
+using BibliotecaVideojuegosApi.Endpoints;
 using BibliotecaVideojuegosApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOpenApi("v1");
+builder.Services.AddValidation();
 builder.Services.AddScoped<VideoJuegoService>();
 builder.Services.AddScoped<PrestamoVideoJuegoService>();
 builder.Services.AddScoped<CopiaVideoJuegoService>();
 
-// Configure EF Core with SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Ensure database is created at startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 }
 
+app.MapVideoJuegosEndpoints();
+app.MapBusquedaEndpoints();
+app.MapCopiaVideoJuegoEndpoints();
+app.MapPrestamoVideoJuegoEndpoints();
 app.MapGet("/", (VideoJuegoService videoJuegosService) => videoJuegosService.GetVideosJuegos());
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();   
+}
 
 app.Run();
